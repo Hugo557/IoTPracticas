@@ -1,5 +1,5 @@
 var g = null;
-var intervalo = 1000; // cada 1 segundo
+var intervalo = 1000; // ms
 
 document.addEventListener("DOMContentLoaded", function () {
     g = new JustGage({
@@ -20,7 +20,10 @@ function getReading() {
         url: "/api/temperatura",
         method: "GET",
         success: function (data) {
-            var temp = parseFloat(data.result);
+
+            console.log("DATA RECIBIDA:", data);
+
+            var temp = parseFloat(data.valor);   // ← CAMBIO IMPORTANTE
 
             if (isNaN(temp)) {
                 $("#estado").text("Error: valor no numérico.");
@@ -32,7 +35,8 @@ function getReading() {
 
             setTimeout(getReading, intervalo);
         },
-        error: function () {
+        error: function (err) {
+            console.log("ERROR", err);
             $("#estado").text("Error de conexión. Reintentando...");
             setTimeout(getReading, 3000);
         }
