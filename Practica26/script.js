@@ -1,5 +1,5 @@
 var g = null;
-var intervalo = 1000; // ms
+var intervalo = 1000; // cada 1 segundo
 
 document.addEventListener("DOMContentLoaded", function () {
     g = new JustGage({
@@ -32,8 +32,7 @@ function getReading() {
 
             setTimeout(getReading, intervalo);
         },
-        error: function (err) {
-            console.log("ERROR", err);
+        error: function () {
             $("#estado").text("Error de conexión. Reintentando...");
             setTimeout(getReading, 3000);
         }
