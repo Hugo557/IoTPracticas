@@ -1,66 +1,64 @@
-// 🔧 CONFIGURACIÓN
-const accessToken = "f7751b64be0d7336072087457f745e9262d55580";
-const deviceID = "0a10aced202194944a067818";
+var gTemp = null;
+var gHum = null;
 
-const urlTemp = `https://api.particle.io/v1/devices/${deviceID}/gradosC`;
-const urlHumedad = `https://api.particle.io/v1/devices/${deviceID}/porcentajeA1`;
+document.addEventListener("DOMContentLoaded", function () {
 
-// -------- FUNCIONES DE LECTURA --------
+    gTemp = new JustGage({
+        id: "gaugeTemp",
+        value: 0,
+        min: 0,
+        max: 50,
+        title: "Temperatura",
+        label: "°C",
+        decimals: 1
+    });
 
-function leerTemperatura() {
-  $.ajax({
-    url: urlTemp,
-    method: "GET",
-    headers: { "Authorization": "Bearer " + accessToken },
-    success: data => {
-      const temp = parseFloat(data.result);
-      if (!isNaN(temp)) gTemp.refresh(temp);
-    },
-    error: err => console.error("Error Temp:", err)
-  });
-}
+    gHum = new JustGage({
+        id: "gaugeHum",
+        value: 0,
+        min: 0,
+        max: 100,
+        title: "Humedad",
+        label: "%",
+        decimals: 1
+    });
 
-function leerHumedad() {
-  $.ajax({
-    url: urlHumedad,
-    method: "GET",
-    headers: { "Authorization": "Bearer " + accessToken },
-    success: data => {
-      const hum = parseFloat(data.result);
-      if (!isNaN(hum)) gHumedad.refresh(hum);
-    },
-    error: err => console.error("Error Humedad:", err)
-  });
-}
-
-// -------- CREACIÓN DE GAUGES --------
-
-$(function () {
-  gTemp = new JustGage({
-    id: "gaugeTemp",
-    value: 0,
-    min: 0,
-    max: 50,
-    label: "°C",
-    pointer: true,
-    gaugeColor: "#e0e0e0",
-    levelColors: ["#33cc33", "#ffcc00", "#ff3300"]
-  });
-
-  gHumedad = new JustGage({
-    id: "gaugeHumedad",
-    value: 0,
-    min: 0,
-    max: 100,
-    label: "%",
-    pointer: true,
-    gaugeColor: "#e0e0e0",
-    levelColors: ["#0099ff", "#66ccff", "#0033cc"]
-  });
-
-  leerTemperatura();
-  leerHumedad();
-
-  setInterval(leerTemperatura, 1200);
-  setInterval(leerHumedad, 1200);
+    obtenerTemperatura();
+    obtenerHumedad();
 });
+
+// ---- TEMPERATURA ----
+function obtenerTemperatura() {
+    $.ajax({
+        url: "/api/temperatura",
+        method: "GET",
+        success: function (data) {
+            var temp = parseFloat(data.valor);
+            gTemp.refresh(temp);
+            $("#valor-temp").text(temp.toFixed(1) + " °C");
+            setTimeout(obtenerTemperatura, 1200);
+        },
+        error: function () {
+            $("#valor-temp").text("Error");
+            setTimeout(obtenerTemperatura, 3000);
+        }
+    });
+}
+
+// ---- HUMEDAD ----
+function obtenerHumedad() {
+    $.ajax({
+        url: "/api/humedad",
+        method: "GET",
+        success: function (data) {
+            var hum = parseFloat(data.valor);
+            gHum.refresh(hum);
+            $("#valor-hum").text(hum.toFixed(1) + " %");
+            setTimeout(obtenerHumedad, 1200);
+        },
+        error: function () {
+            $("#valor-hum").text("Error");
+            setTimeout(obtenerHumedad, 3000);
+        }
+    });
+}
