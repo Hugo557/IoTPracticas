@@ -1,30 +1,37 @@
+// =====================================================================
+//  ENVIAR COMANDO DE ALIMENTACIÓN MANUAL
+// =====================================================================
 async function alimentarAhora() {
     const estado = document.getElementById("estado");
     estado.textContent = "Enviando comando de alimentación...";
 
     try {
-        const res = await fetch("/api/alimentar", {
-            method: "POST"
-        });
-
+        const res = await fetch("/api/alimentar", { method: "POST" });
         const data = await res.json();
+
         console.log("Respuesta /api/alimentar:", data);
 
-        if (res.ok) {
+        if (res.ok && data.ok) {
             estado.textContent = "¡Alimentación realizada!";
         } else {
-            estado.textContent = "Error al alimentar (servidor).";
+            estado.textContent = "Error al alimentar.";
         }
+
     } catch (err) {
         console.error(err);
         estado.textContent = "Error de conexión al servidor.";
     }
 }
 
+
+
+// =====================================================================
+//  GUARDAR NUEVO HORARIO EN EL PHOTON
+// =====================================================================
 async function guardarHorario() {
     const estado = document.getElementById("estado");
     const input = document.getElementById("horaInput");
-    const hora = input.value;   // formato "HH:MM"
+    const hora = input.value;   // Formato "HH:MM"
 
     if (!hora) {
         alert("Selecciona una hora primero.");
@@ -45,18 +52,27 @@ async function guardarHorario() {
         const data = await res.json();
         console.log("Respuesta /api/setHorario:", data);
 
-        if (res.ok) {
-            estado.textContent = "Horario guardado: " + hora;
+        if (res.ok && data.ok) {
+            estado.textContent = "Horario guardado correctamente.";
+
+            // Actualizar en pantalla
             document.getElementById("progHora").textContent = hora;
+
         } else {
-            estado.textContent = "Error al guardar horario.";
+            estado.textContent = "No se pudo guardar el horario.";
         }
+
     } catch (err) {
         console.error(err);
         estado.textContent = "Error de conexión al guardar horario.";
     }
 }
 
+
+
+// =====================================================================
+//  CARGAR HORARIO ACTUAL DEL PHOTON (desde las variables horaProg y minutoProg)
+// =====================================================================
 async function cargarHorarioActual() {
     const progHora = document.getElementById("progHora");
     const estado = document.getElementById("estado");
@@ -64,16 +80,24 @@ async function cargarHorarioActual() {
     try {
         const res = await fetch("/api/getHorario");
         const data = await res.json();
+
         console.log("Respuesta /api/getHorario:", data);
 
-        if (res.ok && data.hora !== undefined && data.minuto !== undefined) {
-            // Formatear HH:MM con cero a la izquierda
-            const hh = String(data.hora).padStart(2, "0");
-            const mm = String(data.minuto).padStart(2, "0");
-            progHora.textContent = `${hh}:${mm}`;
+        if (res.ok && data.ok) {
+            const h = data.hora;
+            const m = data.minuto;
+
+            if (h >= 0 && m >= 0) {
+                const hh = String(h).padStart(2, "0");
+                const mm = String(m).padStart(2, "0");
+                progHora.textContent = `${hh}:${mm}`;
+            } else {
+                progHora.textContent = "Sin horario programado";
+            }
         } else {
-            progHora.textContent = "Sin horario programado";
+            progHora.textContent = "Error al leer horario";
         }
+
     } catch (err) {
         console.error(err);
         estado.textContent = "No se pudo leer el horario actual.";
@@ -81,6 +105,11 @@ async function cargarHorarioActual() {
     }
 }
 
+
+
+// =====================================================================
+// EVENTOS
+// =====================================================================
 document.getElementById("btnFeed").addEventListener("click", alimentarAhora);
 document.getElementById("btnGuardar").addEventListener("click", guardarHorario);
 
