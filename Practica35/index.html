@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Práctica 35 - Alimentador de Peces IoT</title>
+    <link rel="stylesheet" href="/Practica35/styles.css">
+</head>
+
+<body>
+
+    <h1>Práctica 35 - Alimentador de Peces</h1>
+
+    <div class="contenedor">
+
+        <section class="bloque">
+            <h2>Alimentación Manual</h2>
+            <p>Puedes activar el alimentador desde la web (PC o móvil).</p>
+            <button id="btnFeed">Alimentar ahora</button>
+        </section>
+
+        <section class="bloque">
+            <h2>Programar Horario</h2>
+            <p>Elige la hora a la que se debe alimentar automáticamente.</p>
+            <input type="time" id="horaInput">
+            <button id="btnGuardar">Guardar horario</button>
+
+            <h3>Horario actual programado:</h3>
+            <p id="progHora">Cargando...</p>
+        </section>
+
+        <section class="bloque info">
+            <h2>Estado</h2>
+            <p id="estado">Listo.</p>
+        </section>
+
+    </div>
+
+    <script src="/Practica35/script.js"></script>
+</body>
+</html>
