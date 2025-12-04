@@ -26,12 +26,32 @@ async function alimentarAhora() {
 
 
 // =====================================================================
-//  GUARDAR NUEVO HORARIO EN EL PHOTON
+//  CONVERTIR 24 HORAS → FORMATO AM/PM SOLO PARA MOSTRAR
+// =====================================================================
+function formatearAMPM(hora24, minuto) {
+
+    let sufijo = "AM";
+    let h = hora24;
+
+    if (h >= 12) sufijo = "PM";
+    if (h === 0) h = 12;           // 00:00 → 12 AM
+    else if (h > 12) h = h - 12;   // 13–23 → 1–11 PM
+
+    const hh = String(h).padStart(2, "0");
+    const mm = String(minuto).padStart(2, "0");
+
+    return `${hh}:${mm} ${sufijo}`;
+}
+
+
+
+// =====================================================================
+//  GUARDAR NUEVO HORARIO EN EL PHOTON (24 HORAS)
 // =====================================================================
 async function guardarHorario() {
     const estado = document.getElementById("estado");
     const input = document.getElementById("horaInput");
-    const hora = input.value;   // Formato "HH:MM"
+    const hora = input.value;  // formato "HH:MM"
 
     if (!hora) {
         alert("Selecciona una hora primero.");
@@ -43,9 +63,7 @@ async function guardarHorario() {
     try {
         const res = await fetch("/api/setHorario", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ horario: hora })
         });
 
@@ -53,10 +71,12 @@ async function guardarHorario() {
         console.log("Respuesta /api/setHorario:", data);
 
         if (res.ok && data.ok) {
-            estado.textContent = "Horario guardado correctamente.";
 
-            // Actualizar en pantalla
-            document.getElementById("progHora").textContent = hora;
+            // Convertir a AM/PM para mostrarlo
+            const [H, M] = hora.split(":").map(Number);
+            document.getElementById("progHora").textContent = formatearAMPM(H, M);
+
+            estado.textContent = "Horario guardado correctamente.";
 
         } else {
             estado.textContent = "No se pudo guardar el horario.";
@@ -71,7 +91,7 @@ async function guardarHorario() {
 
 
 // =====================================================================
-//  CARGAR HORARIO ACTUAL DEL PHOTON (desde las variables horaProg y minutoProg)
+//  CARGAR HORARIO ACTUAL DEL PHOTON Y MOSTRARLO COMO AM/PM
 // =====================================================================
 async function cargarHorarioActual() {
     const progHora = document.getElementById("progHora");
@@ -88,9 +108,7 @@ async function cargarHorarioActual() {
             const m = data.minuto;
 
             if (h >= 0 && m >= 0) {
-                const hh = String(h).padStart(2, "0");
-                const mm = String(m).padStart(2, "0");
-                progHora.textContent = `${hh}:${mm}`;
+                progHora.textContent = formatearAMPM(h, m);
             } else {
                 progHora.textContent = "Sin horario programado";
             }
