@@ -142,6 +142,74 @@ function formatearAMPM(hora24, minuto) {
 }
 
 // =============================
+// Guardar Horario
+// =============================
+async function guardarHorario() {
+
+    const estado = document.getElementById("estado");
+    const input = document.getElementById("horaInput");
+    const hora = input.value; // HH:MM
+
+    if (!hora) {
+        alert("Selecciona una hora primero.");
+        return;
+    }
+
+    estado.textContent = "Guardando horario...";
+
+    try {
+        const res = await fetch("/api/setHorario", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ horario: hora })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.ok) {
+            const [H, M] = hora.split(":").map(Number);
+            document.getElementById("progHora").textContent =
+                formatearAMPM(H, M);
+
+            estado.textContent = "Horario guardado correctamente.";
+        } else {
+            estado.textContent = "No se pudo guardar el horario.";
+        }
+
+    } catch (err) {
+        console.error(err);
+        estado.textContent = "Error de conexión al guardar horario.";
+    }
+}
+
+// =============================
+// Leer Horario Actual
+// =============================
+async function cargarHorarioActual() {
+
+    try {
+        const res = await fetch("/api/getHorario");
+        const data = await res.json();
+
+        if (res.ok && data.ok) {
+
+            if (data.hora >= 0 && data.minuto >= 0) {
+                document.getElementById("progHora").textContent =
+                    formatearAMPM(data.hora, data.minuto);
+            } else {
+                document.getElementById("progHora").textContent =
+                    "Sin horario programado";
+            }
+        }
+
+    } catch (err) {
+        console.error("Error al cargar horario:", err);
+        document.getElementById("progHora").textContent = "Error";
+    }
+}
+
+
+// =============================
 // AGREGAR HISTORIAL
 // =============================
 async function agregarHistorial() {
@@ -199,4 +267,5 @@ async function rellenar() {
 // =============================
 document.addEventListener("DOMContentLoaded", () => {
     cargarNivel();
+    cargarHorarioActual();
 });

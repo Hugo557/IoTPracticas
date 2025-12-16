@@ -61,6 +61,17 @@
         </section>
 
         <section class="bloque ancho">
+            <h2>Programar horario</h2>
+            <p>Selecciona la hora para dispensar agua automáticamente.</p>
+
+            <input type="time" id="horaInput">
+            <button onclick="guardarHorario()">Guardar horario</button>
+
+            <h3>Horario actual programado:</h3>
+            <p id="progHora">Cargando...</p>
+        </section>
+
+        <section class="bloque ancho">
             <h2>📜 Historial de dispensado</h2>
 
             <table id="tablaHistorial">
