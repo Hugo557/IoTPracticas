@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Proyecto Final - Dispensador de Agua</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <h1>🐾 Dispensador de Agua para Mascotas</h1>
+
+    <div class="contenedor">
+
+        <section class="bloque">
+            <h2>Selecciona tu mascota</h2>
+
+            <table>
+                <tr>
+                    <th>Mascota</th>
+                    <th>ML</th>
+                    <th>Acción</th>
+                </tr>
+                <tr>
+                    <td>Gato</td>
+                    <td>75 ml</td>
+                    <td><button onclick="setMascota('gato')">Seleccionar</button></td>
+                </tr>
+                <tr>
+                    <td>Perro chico</td>
+                    <td>150 ml</td>
+                    <td><button onclick="setMascota('chico')">Seleccionar</button></td>
+                </tr>
+                <tr>
+                    <td>Perro mediano</td>
+                    <td>250 ml</td>
+                    <td><button onclick="setMascota('mediano')">Seleccionar</button></td>
+                </tr>
+                <tr>
+                    <td>Perro grande</td>
+                    <td>400 ml</td>
+                    <td><button onclick="setMascota('grande')">Seleccionar</button></td>
+                </tr>
+            </table>
+        </section>
+
+        <section class="bloque ancho">
+            <button class="principal" onclick="dispensar()">Dispensar ahora</button>
+            <p id="estado">Listo.</p>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
