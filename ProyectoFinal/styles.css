@@ -131,3 +131,11 @@ button.principal:hover {
     margin-top: 8px;
     font-weight: bold;
 }
+
+button.alerta {
+    background: #dc2626;
+}
+
+button.alerta:hover {
+    background: #b91c1c;
+}

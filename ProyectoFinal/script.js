@@ -68,6 +68,14 @@ function actualizarNivel(ml) {
     }
 }
 
+function rellenar() {
+    nivelAgua = CAPACIDAD_TOTAL;
+    actualizarNivel(nivelAgua);
+
+    document.getElementById("estado").textContent =
+        "Depósito rellenado (1000 ml)";
+}
+
 // -----------------------------
 // Inicialización
 // -----------------------------
