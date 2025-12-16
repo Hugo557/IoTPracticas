@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Proyecto Final - Dispensador de Agua</title>
@@ -8,7 +9,7 @@
 
 <body>
 
-    <h1>🐾 Dispensador de Agua para Mascotas</h1>
+    <h1 class="titulo">Dispensador de Agua para Mascotas</h1>
 
     <div class="contenedor">
 
@@ -22,22 +23,22 @@
                     <th>Acción</th>
                 </tr>
                 <tr>
-                    <td>Gato</td>
+                    <td>🐱 Gato</td>
                     <td>75 ml</td>
                     <td><button onclick="setMascota('gato')">Seleccionar</button></td>
                 </tr>
                 <tr>
-                    <td>Perro chico</td>
+                    <td>🐶 Perro chico</td>
                     <td>150 ml</td>
                     <td><button onclick="setMascota('chico')">Seleccionar</button></td>
                 </tr>
                 <tr>
-                    <td>Perro mediano</td>
+                    <td>🐕 Perro mediano</td>
                     <td>250 ml</td>
                     <td><button onclick="setMascota('mediano')">Seleccionar</button></td>
                 </tr>
                 <tr>
-                    <td>Perro grande</td>
+                    <td>🐕‍🦺 Perro grande</td>
                     <td>400 ml</td>
                     <td><button onclick="setMascota('grande')">Seleccionar</button></td>
                 </tr>
@@ -46,6 +47,14 @@
 
         <section class="bloque ancho">
             <button class="principal" onclick="dispensar()">Dispensar ahora</button>
+            <div class="nivel-contenedor">
+                <p>Nivel de agua</p>
+                <div class="barra">
+                    <div id="barraNivel" class="barra-nivel"></div>
+                </div>
+                <p id="textoNivel">1000 ml</p>
+            </div>
+
             <p id="estado">Listo.</p>
         </section>
 
@@ -53,4 +62,5 @@
 
     <script src="script.js"></script>
 </body>
+
 </html>
