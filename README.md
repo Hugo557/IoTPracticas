@@ -7,10 +7,11 @@ Repositorio que concentra todas las prácticas desarrolladas durante la materia 
 📌 Contenido del Repositorio
 
 El proyecto está organizado por prácticas incrementales, donde cada una introduce nuevos conceptos de IoT, hasta llegar a un sistema funcional completo.
+
 IOTPRACTICAS/
 │
-├── api/                    # APIs para comunicación con Particle Cloud
-|   ├── alimentar.js
+├── api/                         # APIs para comunicación con Particle Cloud
+│   ├── alimentar.js
 │   ├── dispensar.js
 │   ├── getHorario.js
 │   ├── getNivel.js
@@ -22,41 +23,42 @@ IOTPRACTICAS/
 │   └── temperatura.js
 │
 ├── Practica24/
-|   ├── index.html
+│   ├── index.html
 │   ├── script.js
 │   └── styles.css
-|
+│
 ├── Practica25/
 │   ├── index.html
 │   ├── script.js
 │   └── styles.css
 │
 ├── Practica26/
-|   ├── index.html
-│   ├── script.js
-│   └── styles.css
-|
-├── Practica27/
-|   ├── index.html
-│   ├── script.js
-│   └── styles.css
-|
-├── Practica35/
-|   ├── index.html
-│   ├── script.js
-│   └── styles.css
-│
-├── ProyectoFinal/           # Sistema completo IoT
 │   ├── index.html
 │   ├── script.js
 │   └── styles.css
 │
-├── index.html               # Página principal
+├── Practica27/
+│   ├── index.html
+│   ├── script.js
+│   └── styles.css
+│
+├── Practica35/
+│   ├── index.html
+│   ├── script.js
+│   └── styles.css
+│
+├── ProyectoFinal/               # Sistema completo IoT
+│   ├── index.html
+│   ├── script.js
+│   └── styles.css
+│
+├── index.html                   # Página principal
 ├── styles.css
 ├── README.md
-├── .env                     # Variables de entorno (no se sube)
+├── .env                         # Variables de entorno (no se sube)
 ├── .gitignore
-└── vercel.json              # Configuración de despliegue
+└── vercel.json                  # Configuración de despliegue
+
 
 🧠 Temas Vistos
 
@@ -191,6 +193,7 @@ Persistencia y automatización
 
 👨‍💻 Autor
 
-Hugo Espinoza
+Hugo Emilio Espinoza Tun
+Jesús Contreras Castillo
 Ingeniería en Sistemas Computacionales
 Instituto Tecnológico de Saltillo
