@@ -50,7 +50,7 @@ IOTPRACTICAS/
 ├── .env # Variables de entorno (no se sube)
 ├── .gitignore
 └── vercel.json # Configuración de despliegue
-"
+"== $0
 
 🧠 Temas Vistos
 
