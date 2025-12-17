@@ -9,55 +9,47 @@ Repositorio que concentra todas las prácticas desarrolladas durante la materia 
 El proyecto está organizado por prácticas incrementales, donde cada una introduce nuevos conceptos de IoT, hasta llegar a un sistema funcional completo.
 
 IOTPRACTICAS/
-├── api/                          # APIs para comunicación con Particle Cloud
-│   ├── alimentar.js
-│   ├── dispensar.js
-│   ├── getHorario.js
-│   ├── getNivel.js
-│   ├── humedad.js
-│   ├── rele.js
-│   ├── rellenar.js
-│   ├── setHorario.js
-│   ├── setMascota.js
-│   └── temperatura.js
-│
+├── api/ # APIs para comunicación con Particle Cloud
+│ ├── alimentar.js
+│ ├── dispensar.js
+│ ├── getHorario.js
+│ ├── getNivel.js
+│ ├── humedad.js
+│ ├── rele.js
+│ ├── rellenar.js
+│ ├── setHorario.js
+│ ├── setMascota.js
+│ └── temperatura.js
 ├── Practica24/
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
-│
+│ ├── index.html
+│ ├── script.js
+│ └── styles.css
 ├── Practica25/
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
-│
+│ ├── index.html
+│ ├── script.js
+│ └── styles.css
 ├── Practica26/
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
-│
+│ ├── index.html
+│ ├── script.js
+│ └── styles.css
 ├── Practica27/
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
-│
+│ ├── index.html
+│ ├── script.js
+│ └── styles.css
 ├── Practica35/
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
-│
-├── ProyectoFinal/                # Sistema completo IoT
-│   ├── index.html
-│   ├── script.js
-│   └── styles.css
-│
-├── index.html                    # Página principal
+│ ├── index.html
+│ ├── script.js
+│ └── styles.css
+├── ProyectoFinal/ # Sistema completo IoT
+│ ├── index.html
+│ ├── script.js
+│ └── styles.css
+├── index.html # Página principal
 ├── styles.css
 ├── README.md
-├── .env                          # Variables de entorno (no se sube)
+├── .env # Variables de entorno (no se sube)
 ├── .gitignore
-└── vercel.json                   # Configuración de despliegue
-
+└── vercel.json # Configuración de despliegue
 
 
 🧠 Temas Vistos
