@@ -1,15 +1,8 @@
 // =============================
-// CONFIGURACIÓN PARTICLE
-// =============================
-const DEVICE_ID = "TU_DEVICE_ID";
-const TOKEN = "TU_ACCESS_TOKEN";
-
-// =============================
 // CONSTANTES
 // =============================
 const CAPACIDAD_TOTAL = 1000;
 
-// Cantidades por mascota
 const cantidades = {
     gato: 75,
     chico: 150,
@@ -23,26 +16,25 @@ let mascotaActual = null;
 // SELECCIONAR MASCOTA
 // =============================
 async function setMascota(tipo) {
-
     mascotaActual = tipo;
 
     try {
-        await fetch(
-            `https://api.particle.io/v1/devices/${DEVICE_ID}/setMascota`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `access_token=${TOKEN}&arg=${tipo}`
-            }
-        );
+        const res = await fetch("/api/setMascota", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mascota: tipo })
+        });
 
-        document.getElementById("estado").textContent =
-            "Mascota seleccionada: " + tipo;
+        if (res.ok) {
+            document.getElementById("estado").textContent =
+                "Mascota seleccionada: " + tipo;
+        } else {
+            throw new Error();
+        }
 
-    } catch (err) {
-        console.error(err);
+    } catch {
         document.getElementById("estado").textContent =
-            "Error al configurar mascota";
+            "Error al seleccionar mascota";
     }
 }
 
@@ -58,104 +50,76 @@ async function dispensar() {
     }
 
     try {
-        const res = await fetch(
-            `https://api.particle.io/v1/devices/${DEVICE_ID}/dispensar`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `access_token=${TOKEN}&arg=ahora`
-            }
-        );
-
+        const res = await fetch("/api/dispensar", { method: "POST" });
         const data = await res.json();
 
-        if (res.ok) {
-            document.getElementById("estado").textContent =
-                "Agua dispensada correctamente";
+        if (!res.ok) throw new Error();
 
-            // Actualizar nivel desde el Photon
-            await cargarNivel();
-            await agregarHistorial();
-
-        } else {
-            document.getElementById("estado").textContent =
-                "Error al dispensar";
-        }
-
-    } catch (err) {
-        console.error(err);
         document.getElementById("estado").textContent =
-            "Error de conexión con el dispositivo";
+            "Agua dispensada correctamente";
+
+        await cargarNivel();
+        agregarHistorial();
+
+    } catch {
+        document.getElementById("estado").textContent =
+            "Error al dispensar agua";
     }
 }
 
 // =============================
-// OBTENER NIVEL DE AGUA
+// NIVEL DE AGUA
 // =============================
 async function cargarNivel() {
     try {
-        const res = await fetch(
-            `https://api.particle.io/v1/devices/${DEVICE_ID}/aguaRestante?access_token=${TOKEN}`
-        );
+        const res = await fetch("/api/getNivel");
         const data = await res.json();
 
         if (res.ok) {
-            actualizarNivel(data.result);
+            actualizarNivel(data.nivel);
         }
     } catch (err) {
-        console.error("Error leyendo nivel:", err);
+        console.error("Error nivel:", err);
     }
 }
 
-
-// =============================
-// ACTUALIZAR BARRA VISUAL
-// =============================
 function actualizarNivel(ml) {
-
     const porcentaje = (ml / CAPACIDAD_TOTAL) * 100;
     const barra = document.getElementById("barraNivel");
 
     barra.style.width = porcentaje + "%";
     document.getElementById("textoNivel").textContent = ml + " ml";
 
-    if (ml <= 200) {
-        barra.classList.add("bajo");
-    } else {
-        barra.classList.remove("bajo");
-    }
+    if (ml <= 200) barra.classList.add("bajo");
+    else barra.classList.remove("bajo");
 }
 
 // =============================
-// FORMATO HORA AM/PM
+// HISTORIAL
 // =============================
-function formatearAMPM(hora24, minuto) {
+function agregarHistorial() {
 
-    let sufijo = "AM";
-    let h = hora24;
+    const ahora = new Date();
+    const hora = ahora.toLocaleTimeString("es-MX", {
+        hour: "2-digit",
+        minute: "2-digit"
+    });
 
-    if (h >= 12) sufijo = "PM";
-    if (h === 0) h = 12;
-    else if (h > 12) h -= 12;
+    const tabla = document.getElementById("tablaHistorial");
+    const fila = tabla.insertRow(1);
 
-    return `${String(h).padStart(2, "0")}:${String(minuto).padStart(2, "0")} ${sufijo}`;
+    fila.insertCell(0).textContent = hora;
+    fila.insertCell(1).textContent = mascotaActual;
+    fila.insertCell(2).textContent = cantidades[mascotaActual] + " ml";
 }
 
 // =============================
-// Guardar Horario
+// HORARIO
 // =============================
 async function guardarHorario() {
+    const hora = document.getElementById("horaInput").value;
 
-    const estado = document.getElementById("estado");
-    const input = document.getElementById("horaInput");
-    const hora = input.value; // HH:MM
-
-    if (!hora) {
-        alert("Selecciona una hora primero.");
-        return;
-    }
-
-    estado.textContent = "Guardando horario...";
+    if (!hora) return alert("Selecciona una hora");
 
     try {
         const res = await fetch("/api/setHorario", {
@@ -164,101 +128,49 @@ async function guardarHorario() {
             body: JSON.stringify({ horario: hora })
         });
 
-        const data = await res.json();
-
-        if (res.ok && data.ok) {
-            const [H, M] = hora.split(":").map(Number);
-            document.getElementById("progHora").textContent =
-                formatearAMPM(H, M);
-
-            estado.textContent = "Horario guardado correctamente.";
-        } else {
-            estado.textContent = "No se pudo guardar el horario.";
+        if (res.ok) {
+            document.getElementById("estado").textContent =
+                "Horario guardado";
+            cargarHorarioActual();
         }
 
-    } catch (err) {
-        console.error(err);
-        estado.textContent = "Error de conexión al guardar horario.";
+    } catch {
+        document.getElementById("estado").textContent =
+            "Error al guardar horario";
     }
 }
 
-// =============================
-// Leer Horario Actual
-// =============================
 async function cargarHorarioActual() {
-
     try {
         const res = await fetch("/api/getHorario");
         const data = await res.json();
 
-        if (res.ok && data.ok) {
-
-            if (data.hora >= 0 && data.minuto >= 0) {
-                document.getElementById("progHora").textContent =
-                    formatearAMPM(data.hora, data.minuto);
-            } else {
-                document.getElementById("progHora").textContent =
-                    "Sin horario programado";
-            }
+        if (res.ok && data.hora >= 0) {
+            document.getElementById("progHora").textContent =
+                `${data.hora}:${String(data.minuto).padStart(2, "0")}`;
         }
-
-    } catch (err) {
-        console.error("Error al cargar horario:", err);
-        document.getElementById("progHora").textContent = "Error";
-    }
-}
-
-
-// =============================
-// AGREGAR HISTORIAL
-// =============================
-async function agregarHistorial() {
-
-    try {
-        const res = await fetch("/api/getHora");
-        const data = await res.json();
-
-        if (!data.ok) return;
-
-        const hora = formatearAMPM(data.hora, data.minuto);
-        const ml = cantidades[mascotaActual];
-
-        const tabla = document.getElementById("tablaHistorial");
-        const fila = tabla.insertRow(1);
-
-        fila.insertCell(0).textContent = hora;
-        fila.insertCell(1).textContent = mascotaActual;
-        fila.insertCell(2).textContent = ml + " ml";
-
-    } catch (err) {
-        console.error("Error en historial:", err);
-    }
+    } catch {}
 }
 
 // =============================
-// RELLENAR DEPÓSITO
+// RELLENAR DEPÓSITO (LÓGICO)
 // =============================
 async function rellenar() {
 
     try {
-        await fetch(
-            `https://api.particle.io/v1/devices/${DEVICE_ID}/rellenar`,
-            {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `access_token=${TOKEN}`
-            }
-        );
+        const res = await fetch("/api/rellenar", { method: "POST" });
+        const data = await res.json();
 
-        await cargarNivel();
+        if (!res.ok) throw new Error();
+
+        actualizarNivel(data.nivel);
 
         document.getElementById("estado").textContent =
-            "Depósito rellenado";
+            "Depósito rellenado (1000 ml)";
 
-    } catch (err) {
-        console.error(err);
+    } catch {
         document.getElementById("estado").textContent =
-            "Error al rellenar";
+            "Error al rellenar depósito";
     }
 }
 
