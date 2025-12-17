@@ -9,8 +9,7 @@ Repositorio que concentra todas las prácticas desarrolladas durante la materia 
 El proyecto está organizado por prácticas incrementales, donde cada una introduce nuevos conceptos de IoT, hasta llegar a un sistema funcional completo.
 
 IOTPRACTICAS/
-│
-├── api/                         # APIs para comunicación con Particle Cloud
+├── api/                          # APIs para comunicación con Particle Cloud
 │   ├── alimentar.js
 │   ├── dispensar.js
 │   ├── getHorario.js
@@ -47,17 +46,18 @@ IOTPRACTICAS/
 │   ├── script.js
 │   └── styles.css
 │
-├── ProyectoFinal/               # Sistema completo IoT
+├── ProyectoFinal/                # Sistema completo IoT
 │   ├── index.html
 │   ├── script.js
 │   └── styles.css
 │
-├── index.html                   # Página principal
+├── index.html                    # Página principal
 ├── styles.css
 ├── README.md
-├── .env                         # Variables de entorno (no se sube)
+├── .env                          # Variables de entorno (no se sube)
 ├── .gitignore
-└── vercel.json                  # Configuración de despliegue
+└── vercel.json                   # Configuración de despliegue
+
 
 
 🧠 Temas Vistos
