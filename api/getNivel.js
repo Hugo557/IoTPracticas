@@ -3,10 +3,22 @@ export default async function handler(req, res) {
         return res.status(405).json({ ok: false });
     }
 
-    try {
-        const url = `https://api.particle.io/v1/devices/${process.env.PARTICLE_DEVICE_ID}/aguaRestante?access_token=${process.env.PARTICLE_ACCESS_TOKEN}`;
+    const accessToken = process.env.PARTICLE_ACCESS_TOKEN;
+    const deviceID = process.env.PARTICLE_DEVICE_ID;
 
-        const response = await fetch(url);
+    if (!accessToken || !deviceID) {
+        return res.status(500).json({ ok: false, error: "Env vars missing" });
+    }
+
+    try {
+        const url = `https://api.particle.io/v1/devices/${deviceID}/aguaRestante`;
+
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${accessToken}`
+            }
+        });
+
         const data = await response.json();
 
         if (!response.ok) {
